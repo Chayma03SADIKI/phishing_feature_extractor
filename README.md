@@ -12,8 +12,7 @@ et construire un dataset CSV prêt pour l'entraînement de modèles ML.
 - `extract_hostinfo_features.py` : extraction des features liées à l'hôte (DNS / SSL / ASN).  
 - `extract_contentinfo_features.py` : extraction des features liées au contenu (HTML, screenshot, headers).  
 - `extract_additional_features.py` : comparaison `rd` (root domain) vs `sd` (subdomain), wayback, etc.  
-- `output/` : dossier généré contenant `phishing_dataset.csv`.  
-- `example_jsons/` : (optionnel) exemples JSON utilisés pour tests.
+- `output/` : dossier généré contenant `phishing_dataset.csv`. 
 
 ---
 
