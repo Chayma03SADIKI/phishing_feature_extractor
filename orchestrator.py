@@ -44,7 +44,7 @@ def safe_call(func, arg, fname, filename):
             return {}
         return result
     except Exception as e:
-        print(f"⚠️  Extractor error in '{fname}' while processing '{filename}': {e}")
+        print(f"Extractor error in '{fname}' while processing '{filename}': {e}")
         traceback.print_exc()
         return {}
 
@@ -55,14 +55,14 @@ def load_json_file(file_path, filename):
         with open(file_path, "r", encoding="utf-8") as f:
             content = f.read().strip()
             if not content:
-                print(f"⚠️ Empty file skipped: {filename}")
+                print(f"Empty file skipped: {filename}")
                 return None
             return json.loads(content)
     except json.JSONDecodeError as e:
-        print(f"⚠️ Invalid JSON in '{filename}': {e}")
+        print(f"Invalid JSON in '{filename}': {e}")
         return None
     except Exception as e:
-        print(f"⚠️ Error reading '{filename}': {e}")
+        print(f"Error reading '{filename}': {e}")
         traceback.print_exc()
         return None
 
@@ -77,10 +77,10 @@ def build_global_dataframe() -> pd.DataFrame:
 
     for folder_path, label, category_name in categories:
         if not os.path.exists(folder_path):
-            print(f"⚠️ Folder not found: {folder_path}")
+            print(f"Folder not found: {folder_path}")
             continue
 
-        print(f"\n📂 Processing folder: {category_name.upper()} — label={label}")
+        print(f"\n Processing folder: {category_name.upper()} — label={label}")
 
         files = [fn for fn in os.listdir(folder_path) if fn.lower().endswith(".json")]
         for filename in tqdm(files, desc=f"{category_name} files", unit="file"):
@@ -90,7 +90,7 @@ def build_global_dataframe() -> pd.DataFrame:
                 # Already logged the reason in load_json_file
                 continue
             if not isinstance(data, dict):
-                print(f"⚠️ Skipped invalid JSON structure in: {filename}")
+                print(f"Skipped invalid JSON structure in: {filename}")
                 continue
 
             # Collect features safely: one extractor failure won't drop the whole file
@@ -119,7 +119,7 @@ def build_global_dataframe() -> pd.DataFrame:
     # Optionally fill NaNs with 0 or other value:
     if not df.empty:
         df.fillna(0, inplace=True)
-    print(f"\n✅ Dataset built with {len(df)} samples and {len(df.columns)} columns.")
+    print(f"\n Dataset built with {len(df)} samples and {len(df.columns)} columns.")
     return df
 
 
@@ -128,6 +128,6 @@ if __name__ == "__main__":
     os.makedirs("output", exist_ok=True)
     out = os.path.join("output", "phishing_dataset.csv")
     df.to_csv(out, index=False, encoding="utf-8")
-    print(f"\n💾 CSV saved to: {out}")
-    print("\n🔎 DataFrame preview:")
+    print(f"\n CSV saved to: {out}")
+    print("\n DataFrame preview:")
     print(df.head(5))
