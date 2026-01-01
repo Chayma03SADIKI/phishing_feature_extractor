@@ -91,11 +91,9 @@ def build_global_dataframe() -> pd.DataFrame:
             host_info = data.get("host_info") or {}
             content_info = data.get("content_info") or {}
             additional = data.get("additional") or {}
-            # special data
-            url = data.get("url", "")
 
             row.update(safe_call(extract_hostinfo_features, host_info, "extract_hostinfo_features", filename))
-            row.update(safe_call(extract_contentinfo_features, content_info, "extract_contentinfo_features", filename, url=url))
+            row.update(safe_call(extract_contentinfo_features, content_info, "extract_contentinfo_features", filename))
             row.update(safe_call(extract_additional_features, additional, "extract_additional_features", filename))
 
             # metadata

@@ -3,7 +3,7 @@ from urllib.parse import urlparse
 import re
 
 
-def extract_contentinfo_features(content_info: Dict[str, Any], url="") -> Dict[str, Any]:
+def extract_contentinfo_features(content_info: Dict[str, Any]) -> Dict[str, Any]:
     """
     Extracts numerical and categorical features from the 'content_info' JSON section.
     """
@@ -11,11 +11,12 @@ def extract_contentinfo_features(content_info: Dict[str, Any], url="") -> Dict[s
     features = {}
 
     # Basic page metadata
+    destination = content_info.get("destination", "")
     features["status_code"] = int(content_info.get("status_code", 0))
     features["html_length"] = len(content_info.get("html", ""))
 
     # derived feature
-    domain = urlparse(url).netloc
+    domain = urlparse(destination).netloc
     tld = domain.split('.')[-1].lower()
     
     suspicious_tlds = {
@@ -26,7 +27,6 @@ def extract_contentinfo_features(content_info: Dict[str, Any], url="") -> Dict[s
     features["is_suspicous_cloaking"] = int((tld in suspicious_tlds) and (features["status_code"] in [403, 503, 429]))
 
     # Destination URL
-    destination = content_info.get("destination", "")
     destination_domain = urlparse(destination).netloc
     destination_tld = domain.split('.')[-1].lower()
     destination_rd = destination_domain.split('.')[-2:]
@@ -57,7 +57,6 @@ def extract_contentinfo_features(content_info: Dict[str, Any], url="") -> Dict[s
                 content_types.append(value)
 
     server_string = " ".join(servers)
-    content_string = " ".join(content_types)
 
     features["has_cloudflare"] = int("cloudflare" in server_string)
     features["num_js_files"] = sum("javascript" in t for t in content_types)
@@ -76,5 +75,5 @@ if __name__ == "__main__":
 
     with open("example_contentinfo.json", "r", encoding="utf-8") as f:
         data = json.load(f)
-    feats = extract_contentinfo_features(data, url="https://xcbmut.hgfosb.shop/")
+    feats = extract_contentinfo_features(data)
     print(json.dumps(feats, indent=2))
