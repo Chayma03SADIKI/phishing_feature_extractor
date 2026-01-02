@@ -12,11 +12,12 @@ def extract_contentinfo_features(content_info: Dict[str, Any]) -> Dict[str, Any]
 
     # Basic page metadata
     destination = content_info.get("destination", "")
-    features["status_code"] = int(content_info.get("status_code", 0))
-    features["html_length"] = len(content_info.get("html", ""))
+    features["status_code"] = int(content_info.get("status_code", 0) or 0)
+    features["html_length"] = len(content_info.get("html", "") or "")
 
     # derived feature
     domain = urlparse(destination).netloc
+    domain = domain.decode("utf-8") if isinstance(domain, bytes) else domain
     tld = domain.split('.')[-1].lower()
     
     suspicious_tlds = {
@@ -28,6 +29,7 @@ def extract_contentinfo_features(content_info: Dict[str, Any]) -> Dict[str, Any]
 
     # Destination URL
     destination_domain = urlparse(destination).netloc
+    destination_domain = destination_domain.decode("utf-8") if isinstance(domain, bytes) else domain
     destination_tld = domain.split('.')[-1].lower()
     destination_rd = destination_domain.split('.')[-2:]
     destination_rd = '.'.join(destination_rd)

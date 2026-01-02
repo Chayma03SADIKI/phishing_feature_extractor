@@ -9,8 +9,8 @@ import traceback
 from tqdm import tqdm
 
 # Global paths
-BENIGN_PATH = "D:/Downloads/benign"
-MALICIOUS_PATH = "D:/Downloads/malicious"
+BENIGN_PATH = r"C:\Users\essai\Documents\ensimag\s9\Benign_Data_BDA\Benign_Data_BDA"
+MALICIOUS_PATH = r"C:\Users\essai\Documents\ensimag\s9\Final_Phishing_Dataset\Final_Phishing_Dataset"
 
 from extract_general_features import extract_general_features
 from extract_hostinfo_features import extract_hostinfo_features
@@ -60,8 +60,8 @@ def build_global_dataframe() -> pd.DataFrame:
     data_rows = []
 
     categories = [
-        (BENIGN_PATH, 1, "benign"),
         (MALICIOUS_PATH, 0, "malicious"),
+        (BENIGN_PATH, 1, "benign"),
     ]
 
     for folder_path, label, category_name in categories:

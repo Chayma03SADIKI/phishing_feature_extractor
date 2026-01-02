@@ -24,7 +24,7 @@ def extract_hostinfo_features(host_info: Dict[str, Any]) -> Dict[str, Any]:
     if maxmind_list:
         # Extract info from the first record (most representative)
         first_ans = maxmind_list[0].get("answers", {})
-        features["asn_code"] = int(first_ans.get("asn_code", 0))
+        features["asn_code"] = int(first_ans.get("asn_code", 0) or 0)
         features["country_code"] = hash(first_ans.get("cc_code", "")) % 1000  # encoded numeric
     else:
         features["asn_code"] = 0
@@ -42,7 +42,7 @@ def extract_hostinfo_features(host_info: Dict[str, Any]) -> Dict[str, Any]:
     except Exception:
         features["ssl_validity_days"] = 0
 
-    features["ssl_subject_count"] = len(ssl.get("subject", []))
+    features["ssl_subject_count"] = len(ssl.get("subject", []) or [])
     features["ssl_msg_success"] = int(ssl.get("msg", "").lower() == "success")
 
     #  is HTTPS
